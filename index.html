@@ -3,94 +3,57 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Sticker Creator — Simple & Bonito</title>
-
-<!-- Fuentes divertidas para stickers -->
+<title>Sticker Creator — Limpio y Estable</title>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&family=Baloo+2:wght@700&family=Fredoka:wght@700&family=Bungee&family=Comic+Neue:wght@700&family=Anton&family=Bebas+Neue&family=Black+Ops+One&family=Chewy&family=Lilita+One&family=Titan+One&family=Rubik+Bubbles&family=Press+Start+2P&family=Lobster&family=Pacifico&display=swap" rel="stylesheet">
-
 <style>
   :root{
     --size:512px;
     --ink:#0b1020;
-    --muted:#7082a8;
-    --panel:#ffffff;
-    --card:#ffffff;
-    --brand:#0ea5e9;
-    --brand2:#22d3ee;
-    --ok:#22c55e;
-    --warn:#f59e0b;
-    --danger:#ef4444;
-    --stage-bg:#ffffff;
-    --stage-bd:#e6eaf3;
-    --radius:16px;
+    --muted:#87a0d1;
+    --brand:#0ea5e9; --brand2:#22d3ee; --ok:#22c55e; --danger:#ef4444; --warn:#f59e0b;
+    --stage-bg:#ffffff; --stage-bd:#e6eaf3;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     color:var(--ink);
-    /* Fondo colorido fuera del lienzo */
     background:
       radial-gradient(1100px 600px at 80% -10%, rgba(34,211,238,.18), transparent 60%),
       radial-gradient(800px 500px at 10% -20%, rgba(14,165,233,.22), transparent 50%),
       linear-gradient(180deg,#0c1229 0%, #0b1020 50%, #0a0f1e 100%);
     min-height:100vh;
   }
-
   .shell{max-width:1120px; margin:24px auto; padding:0 16px}
-
-  /* Barra superior compacta */
   .topbar{
     display:flex; gap:10px; align-items:center; justify-content:space-between;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:18px; padding:10px 12px;
-    backdrop-filter: blur(6px);
-    color:#e9f1ff;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:18px; padding:10px 12px; backdrop-filter: blur(6px); color:#e9f1ff;
   }
-  .brand{
-    display:flex; gap:10px; align-items:center; font-weight:800;
-    letter-spacing:.2px;
-  }
-  .brand .logo{
-    width:34px; height:34px; border-radius:10px;
-    background:linear-gradient(135deg,#7dd3fc,#38bdf8); display:grid; place-items:center; color:#062234;
-    box-shadow:0 6px 18px rgba(56,189,248,.35);
-  }
+  .brand{display:flex; gap:10px; align-items:center; font-weight:800}
+  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7dd3fc,#38bdf8);display:grid;place-items:center;box-shadow:0 6px 18px rgba(56,189,248,.35);color:#062234}
   .toolbar{display:flex; gap:8px; flex-wrap:wrap}
-  .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    background:linear-gradient(90deg,var(--brand),var(--brand2)); color:#00121a;
-    border:none; border-radius:12px; padding:10px 12px; font-weight:800; cursor:pointer;
-    box-shadow:0 8px 20px rgba(34,211,238,.25);
-  }
-  .btn.ghost{background:#0e1733; color:#e7efff; border:1px solid rgba(255,255,255,.14); box-shadow:none}
-  .btn.ok{background:linear-gradient(90deg,var(--ok),#86efac); color:#052914}
-  .btn.warn{background:linear-gradient(90deg,var(--warn),#fde68a); color:#231a05}
-  .btn.danger{background:linear-gradient(90deg,var(--danger),#fca5a5); color:#2a0101}
-  .btn:disabled{opacity:.6; cursor:not-allowed}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;padding:10px 12px;font-weight:800;cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,var(--brand),var(--brand2));color:#00121a; box-shadow:0 8px 20px rgba(34,211,238,.25)}
+  .btn.ghost{background:#0e1733;color:#e7efff;border:1px solid rgba(255,255,255,.14)}
+  .btn.ok{background:linear-gradient(90deg,var(--ok),#86efac);color:#052914}
+  .btn.warn{background:linear-gradient(90deg,var(--warn),#fde68a);color:#231a05}
+  .btn.danger{background:linear-gradient(90deg,var(--danger),#fca5a5);color:#2a0101}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
 
-  /* Layout principal */
-  .wrap{display:grid; grid-template-columns: 1fr 360px; gap:16px; margin-top:14px}
-  @media (max-width: 900px){ .wrap{grid-template-columns:1fr} }
+  .wrap{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:14px}
+  @media (max-width:900px){ .wrap{grid-template-columns:1fr} }
 
-  /* Lienzo blanco */
   #stage{
-    width:var(--size); height:var(--size);
-    max-width:100%;
-    aspect-ratio:1/1;
-    position:relative; border-radius:20px; overflow:hidden;
-    background:var(--stage-bg);
-    border:2px solid var(--stage-bd);
-    box-shadow:0 12px 34px rgba(2,8,23,.35);
-    margin:auto;
+    width:var(--size); height:var(--size); max-width:100%; aspect-ratio:1/1;
+    position:relative; border-radius:20px; overflow:hidden; background:var(--stage-bg);
+    border:2px solid var(--stage-bd); box-shadow:0 12px 34px rgba(2,8,23,.35); margin:auto;
     user-select:none; touch-action:none;
   }
   #checker{position:absolute; inset:0; background:
-      conic-gradient(#e5e7eb 0 25%, transparent 0 50%, #e5e7eb 0 75%, transparent 0)
-      0 0/26px 26px; opacity:.7; display:none}
+      conic-gradient(#e5e7eb 0 25%, transparent 0 50%, #e5e7eb 0 75%, transparent 0) 0 0/26px 26px; opacity:.7; display:none}
   #checker.on{display:block}
-  #preview{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:none}
+  #preview{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:none; image-rendering:auto}
   #textLayer{position:absolute; inset:0; pointer-events:none}
   .txt{
     position:absolute; left:140px; top:200px; max-width:360px;
@@ -101,76 +64,48 @@
     transform-origin:left top; transform:rotate(0deg); padding:2px 4px; border-radius:10px
   }
   .txt.selected{outline:2px solid var(--brand); box-shadow:0 0 0 3px rgba(14,165,233,.18)}
-
-  /* Panel derecho, plegable */
-  .panel{
-    background:linear-gradient(180deg, rgba(255,255,255,.04), transparent), #0f1733;
-    border:1px solid rgba(255,255,255,.12); color:#e9f1ff;
-    border-radius:18px; box-shadow:0 10px 30px rgba(2,8,23,.45); padding:12px;
-  }
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,.04), transparent), #0f1733; border:1px solid rgba(255,255,255,.12); color:#e9f1ff; border-radius:18px; box-shadow:0 10px 30px rgba(2,8,23,.45); padding:12px}
   details{border:1px solid rgba(255,255,255,.12); border-radius:14px; overflow:hidden; margin:10px 0}
-  summary{
-    list-style:none; cursor:pointer; padding:10px 12px; background:#0e1733; color:#e7efff; font-weight:700;
-    display:flex; align-items:center; justify-content:space-between
-  }
+  summary{list-style:none; cursor:pointer; padding:10px 12px; background:#0e1733; color:#e7efff; font-weight:700; display:flex; align-items:center; justify-content:space-between}
   .sec{padding:10px 12px; background:#0f183a}
   .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
   .grow{flex:1 1 160px}
-
-  .control, select, input[type="number"], input[type="text"], input[type="color"], input[type="range"]{
-    background:#0e1733; color:#e7efff; border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:9px 12px; font:inherit
-  }
+  .control, select, input[type="number"], input[type="text"], input[type="color"], input[type="range"]{background:#0e1733;color:#e7efff;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:9px 12px;font:inherit}
   label.small{font-size:12px; color:#a9b8e6; display:flex; align-items:center; gap:6px}
   .swatches{display:flex; gap:8px; flex-wrap:wrap}
   .swatch{width:26px; height:26px; border-radius:8px; border:1px solid rgba(255,255,255,.25); cursor:pointer}
-
-  /* Footer mini */
-  .foot{color:#9fb0d9; font-size:12px; text-align:center; margin-top:10px}
 </style>
 </head>
 <body>
   <div class="shell">
-    <!-- BARRA SUPERIOR -->
     <div class="topbar">
-      <div class="brand">
-        <div class="logo">🎨</div>
-        <div>Sticker Creator</div>
-      </div>
-
-      <!-- Botones principales (solo botones visibles) -->
+      <div class="brand"><div class="logo">🎨</div><div>Sticker Creator</div></div>
       <div class="toolbar">
         <button id="btnPick" class="btn ghost" title="Subir imagen desde tu PC">📤 Subir</button>
         <input id="file" type="file" accept="image/*" style="display:none">
-        <button id="btnAdd" class="btn" title="Añadir una capa de texto">➕ Texto</button>
+        <button id="btnAdd" class="btn primary" title="Añadir texto">➕ Texto</button>
+        <button id="btnStickerBorder" class="btn ghost" title="Contorno blanco fuerte en el texto">⬜ Borde pegatina</button>
         <button id="btnRemoveBg" class="btn ok" title="Quitar fondo (elige color y tolerancia)">🧼 Fondo</button>
-        <button id="btnDownload" class="btn warn" title="Descargar tu sticker como PNG/WEBP">⬇️ Descargar</button>
-        <button id="btnClearImg" class="btn danger" title="Eliminar imagen cargada">🗑️ Limpiar</button>
+        <button id="btnDownload" class="btn warn" title="Descargar PNG/WEBP">⬇️ Descargar</button>
+        <button id="btnClearImg" class="btn danger" title="Eliminar imagen">🗑️ Limpiar</button>
       </div>
     </div>
 
     <div class="wrap">
-      <!-- LIENZO -->
       <div id="stage" tabindex="0" title="Arrastra textos. Ctrl+←/→ rota ±5°; flechas mueven 1px (Shift 10px).">
         <div id="checker"></div>
         <img id="preview" alt="Imagen cargada">
         <div id="textLayer"></div>
       </div>
 
-      <!-- PANEL (opciones plegables) -->
       <div class="panel">
         <details open>
           <summary>🔤 Texto</summary>
           <div class="sec">
+            <div class="row"><label class="small grow">Contenido <input id="txText" class="control grow" type="text" value="Nuevo texto" placeholder="Escribe tu texto…"></label></div>
             <div class="row">
-              <label class="small grow">Contenido
-                <input id="txText" class="control grow" type="text" value="Nuevo texto" placeholder="Escribe tu texto…">
-              </label>
-            </div>
-            <div class="row">
-              <label class="small">Color
-                <input id="txColor" class="control" type="color" value="#111827">
-              </label>
-              <div class="swatches" id="txSwatches" title="Colores rápidos">
+              <label class="small">Color <input id="txColor" class="control" type="color" value="#111827"></label>
+              <div class="swatches" id="txSwatches">
                 <div class="swatch" data="#111827" style="background:#111827"></div>
                 <div class="swatch" data="#ffffff" style="background:#ffffff"></div>
                 <div class="swatch" data="#ff0055" style="background:#ff0055"></div>
@@ -182,50 +117,26 @@
               </div>
             </div>
             <div class="row">
-              <label class="small">Tamaño
-                <input id="txSize" class="control" type="number" min="10" max="180" value="44" style="width:90px">
-              </label>
-              <label class="small">Ancho caja
-                <input id="txWidth" class="control" type="range" min="120" max="480" value="360" style="width:180px">
-              </label>
-              <label class="small">Rotación
-                <input id="txRotate" class="control" type="range" min="-180" max="180" value="0" style="width:140px">
-              </label>
+              <label class="small">Tamaño <input id="txSize" class="control" type="number" min="10" max="180" value="44" style="width:90px"></label>
+              <label class="small">Ancho caja <input id="txWidth" class="control" type="range" min="120" max="480" value="360" style="width:180px"></label>
+              <label class="small">Rotación <input id="txRotate" class="control" type="range" min="-180" max="180" value="0" style="width:140px"></label>
             </div>
             <div class="row">
               <label class="small">Fuente
                 <select id="txFont" class="control">
-                  <option>Luckiest Guy</option>
-                  <option>Permanent Marker</option>
-                  <option>Baloo 2</option>
-                  <option>Fredoka</option>
-                  <option>Bungee</option>
-                  <option>Comic Neue</option>
-                  <option>Anton</option>
-                  <option>Bebas Neue</option>
-                  <option>Black Ops One</option>
-                  <option>Chewy</option>
-                  <option>Lilita One</option>
-                  <option>Titan One</option>
-                  <option>Rubik Bubbles</option>
-                  <option>Press Start 2P</option>
-                  <option>Lobster</option>
-                  <option>Pacifico</option>
+                  <option>Luckiest Guy</option><option>Permanent Marker</option><option>Baloo 2</option><option>Fredoka</option><option>Bungee</option><option>Comic Neue</option><option>Anton</option><option>Bebas Neue</option><option>Black Ops One</option><option>Chewy</option><option>Lilita One</option><option>Titan One</option><option>Rubik Bubbles</option><option>Press Start 2P</option><option>Lobster</option><option>Pacifico</option>
                 </select>
               </label>
               <label class="small">B <input id="txBold" type="checkbox"></label>
               <label class="small">I <input id="txItalic" type="checkbox"></label>
               <label class="small">Alineación
                 <select id="txAlign" class="control">
-                  <option value="left">Izquierda</option>
-                  <option value="center">Centro</option>
-                  <option value="right">Derecha</option>
+                  <option value="left">Izquierda</option><option value="center">Centro</option><option value="right">Derecha</option>
                 </select>
               </label>
             </div>
             <div class="row">
-              <label class="small">Contorno
-                <input id="txStrokeColor" class="control" type="color" value="#ffffff" title="Color contorno">
+              <label class="small">Contorno <input id="txStrokeColor" class="control" type="color" value="#ffffff" title="Color contorno">
                 <input id="txStrokeW" class="control" type="number" min="0" max="20" value="3" style="width:72px" title="Grosor (px)">
               </label>
               <label class="small">Sombra <input id="txShadow" type="checkbox" checked></label>
@@ -234,8 +145,8 @@
               <button id="btnFront" class="btn ghost" title="Traer al frente">⬆ Frente</button>
               <button id="btnBack" class="btn ghost" title="Enviar atrás">⬇ Atrás</button>
               <div class="grow"></div>
-              <button id="btnDeleteSel" class="btn danger" title="Borrar seleccionado (Supr)">🗑️ Borrar</button>
-              <button id="btnClearText" class="btn ghost" title="Eliminar todas las capas de texto">🧹 Limpiar textos</button>
+              <button id="btnDeleteSel" class="btn danger" title="Borrar seleccionado">🗑️ Borrar</button>
+              <button id="btnClearText" class="btn ghost" title="Eliminar todos los textos">🧹 Limpiar textos</button>
             </div>
           </div>
         </details>
@@ -247,7 +158,7 @@
               <label class="small">Transparente <input id="bgTransparent" type="checkbox" checked></label>
               <label class="small">Color <input id="bgColor" class="control" type="color" value="#ffffff"></label>
               <div class="grow"></div>
-              <button id="btnPickColor" class="btn ghost" title="Cuentagotas: selecciona color del fondo en la imagen">🎯 Cuentagotas</button>
+              <button id="btnPickColor" class="btn ghost" title="Cuentagotas: elige color del fondo">🎯 Cuentagotas</button>
             </div>
             <div class="row">
               <label class="small">Quitar color <input id="rmColor" class="control" type="color" value="#ffffff"></label>
@@ -261,220 +172,146 @@
           <summary>⬇️ Exportar</summary>
           <div class="sec">
             <div class="row">
-              <label class="small">Tamaño
-                <select id="exSize" class="control"><option value="512">512 px</option><option value="1024">1024 px</option></select>
-              </label>
-              <label class="small">Formato
-                <select id="exFmt" class="control"><option value="png">PNG</option><option value="webp">WEBP</option></select>
-              </label>
+              <label class="small">Tamaño <select id="exSize" class="control"><option value="512">512 px</option><option value="1024">1024 px</option></select></label>
+              <label class="small">Formato <select id="exFmt" class="control"><option value="png">PNG</option><option value="webp">WEBP</option></select></label>
               <div class="grow"></div>
               <button id="btnDownload2" class="btn warn" title="Descargar">⬇️ Descargar</button>
             </div>
           </div>
         </details>
-
-        <div class="foot">Consejo: usa el 🎯 cuentagotas y una tolerancia 15–30 para proteger el borde.</div>
       </div>
     </div>
   </div>
 
 <script>
   const $ = s => document.querySelector(s);
-  const stage = $('#stage'), checker = $('#checker'), img = $('#preview'), layer = $('#textLayer');
-  const file = $('#file');
-  const btnPick = $('#btnPick'), btnClearImg = $('#btnClearImg');
-  const btnAdd = $('#btnAdd'), btnDeleteSel = $('#btnDeleteSel'), btnClearText = $('#btnClearText');
-  const btnCenterH = $('#btnCenterH'), btnCenterV = $('#btnCenterV'), btnFront = $('#btnFront'), btnBack = $('#btnBack');
-  const txText = $('#txText'), txColor = $('#txColor'), txSize = $('#txSize'), txWidth = $('#txWidth'), txRotate = $('#txRotate');
-  const txFont = $('#txFont'), txBold = $('#txBold'), txItalic = $('#txItalic'), txAlign = $('#txAlign');
-  const txStrokeColor = $('#txStrokeColor'), txStrokeW = $('#txStrokeW'), txShadow = $('#txShadow');
-  const bgTransparent = $('#bgTransparent'), bgColor = $('#bgColor');
-  const rmColor = $('#rmColor'), rmTol = $('#rmTol'), btnRemoveBg = $('#btnRemoveBg'), btnRestoreImg = $('#btnRestoreImg'), btnPickColor = $('#btnPickColor');
-  const exSize = $('#exSize'), exFmt = $('#exFmt'), btnDownload = $('#btnDownload'), btnDownload2 = $('#btnDownload2');
-  const txSwatches = $('#txSwatches');
+  const stage=$('#stage'), checker=$('#checker'), img=$('#preview'), layer=$('#textLayer');
+  const file=$('#file');
+  const btnPick=$('#btnPick'), btnClearImg=$('#btnClearImg');
+  const btnAdd=$('#btnAdd'), btnDeleteSel=$('#btnDeleteSel'), btnClearText=$('#btnClearText');
+  const btnCenterH=$('#btnCenterH'), btnCenterV=$('#btnCenterV'), btnFront=$('#btnFront'), btnBack=$('#btnBack');
+  const btnStickerBorder=$('#btnStickerBorder');
+  const txText=$('#txText'), txColor=$('#txColor'), txSize=$('#txSize'), txWidth=$('#txWidth'), txRotate=$('#txRotate');
+  const txFont=$('#txFont'), txBold=$('#txBold'), txItalic=$('#txItalic'), txAlign=$('#txAlign');
+  const txStrokeColor=$('#txStrokeColor'), txStrokeW=$('#txStrokeW'), txShadow=$('#txShadow');
+  const bgTransparent=$('#bgTransparent'), bgColor=$('#bgColor');
+  const rmColor=$('#rmColor'), rmTol=$('#rmTol'), btnRemoveBg=$('#btnRemoveBg'), btnRestoreImg=$('#btnRestoreImg'), btnPickColor=$('#btnPickColor');
+  const exSize=$('#exSize'), exFmt=$('#exFmt'), btnDownload=$('#btnDownload'), btnDownload2=$('#btnDownload2');
+  const txSwatches=$('#txSwatches');
 
-  let active = null, imgLoaded = false, originalImgDataURL = null, pickerMode = false;
+  let active=null, imgLoaded=false, originalImgDataURL=null, pickerMode=false;
 
-  // ------- Imagen
-  btnPick.onclick = () => file.click();
-  file.onchange = e => {
-    const f = e.target.files?.[0]; if(!f) return;
-    const rd = new FileReader();
-    rd.onload = ev => setImage(ev.target.result);
-    rd.readAsDataURL(f);
-  };
-  ['dragenter','dragover','dragleave','drop'].forEach(ev => stage.addEventListener(ev, e=>{e.preventDefault(); e.stopPropagation();}));
-  stage.addEventListener('drop', e=>{
-    const f = e.dataTransfer.files?.[0];
-    if(f && f.type.startsWith('image/')){
-      const rd = new FileReader();
-      rd.onload = ev => setImage(ev.target.result);
-      rd.readAsDataURL(f);
-    }
-  });
-  window.addEventListener('paste', e=>{
-    const it = e.clipboardData?.items; if(!it) return;
-    for(const a of it){
-      if(a.type.startsWith('image/')){
-        const f = a.getAsFile();
-        const rd = new FileReader();
-        rd.onload = ev => setImage(ev.target.result);
-        rd.readAsDataURL(f); break;
-      }
-    }
-  });
-  btnClearImg.onclick = ()=>{
-    img.removeAttribute('src'); img.style.display='none'; checker.classList.toggle('on', bgTransparent.checked);
-    imgLoaded=false; originalImgDataURL=null;
-  };
-  function setImage(src){
-    img.src = src; img.style.display='block'; imgLoaded=true; originalImgDataURL = src;
-    checker.classList.toggle('on', bgTransparent.checked);
-  }
+  // Imagen
+  btnPick.onclick=()=>file.click();
+  file.onchange=e=>{ const f=e.target.files?.[0]; if(!f) return; const rd=new FileReader(); rd.onload=ev=>setImage(ev.target.result); rd.readAsDataURL(f); };
+  ['dragenter','dragover','dragleave','drop'].forEach(ev=>stage.addEventListener(ev,e=>{e.preventDefault();e.stopPropagation();}));
+  stage.addEventListener('drop',e=>{ const f=e.dataTransfer.files?.[0]; if(f&&f.type.startsWith('image/')){ const rd=new FileReader(); rd.onload=ev=>setImage(ev.target.result); rd.readAsDataURL(f);} });
+  window.addEventListener('paste',e=>{ const it=e.clipboardData?.items; if(!it) return; for(const a of it){ if(a.type.startsWith('image/')){ const f=a.getAsFile(); const rd=new FileReader(); rd.onload=ev=>setImage(ev.target.result); rd.readAsDataURL(f); break; } } });
+  btnClearImg.onclick=()=>{ img.removeAttribute('src'); img.style.display='none'; checker.classList.toggle('on', bgTransparent.checked); imgLoaded=false; originalImgDataURL=null; };
+  function setImage(src){ img.src=src; img.style.display='block'; imgLoaded=true; originalImgDataURL=src; checker.classList.toggle('on', bgTransparent.checked); }
 
-  // --------- Texto
+  // Texto
   function createText(){
     if(!imgLoaded){ alert('Primero sube una imagen.'); return; }
-    const el = document.createElement('div');
-    el.className = 'txt';
-    el.textContent = txText.value || 'Nuevo texto';
-    el.dataset.rot = '0';
-    el.style.left = '140px';
-    el.style.top = '200px';
-    el.style.maxWidth = txWidth.value + 'px';
+    const el=document.createElement('div');
+    el.className='txt';
+    el.textContent=txText.value||'Nuevo texto';
+    el.dataset.rot='0';
+    el.style.left='140px'; el.style.top='200px'; el.style.maxWidth=txWidth.value+'px';
     applyInputs(el);
     layer.appendChild(el);
     select(el);
   }
-  function select(el){
-    if(active) active.classList.remove('selected');
-    active = el;
-    if(active){ active.classList.add('selected'); reflectInputs(); }
-  }
+  function select(el){ if(active) active.classList.remove('selected'); active=el; if(active){ active.classList.add('selected'); reflectInputs(); } }
   function reflectInputs(){
-    const cs = getComputedStyle(active);
-    txText.value = active.textContent;
-    txColor.value = rgbToHex(cs.color);
-    txSize.value = parseInt(active.style.fontSize)||44;
-    txWidth.value = parseInt(active.style.maxWidth)||360;
-    txRotate.value = parseFloat(active.dataset.rot||'0')||0;
-    txFont.value = (active.style.fontFamily||'').replaceAll('"','').split(',')[0] || 'Luckiest Guy';
-    txBold.checked = (active.style.fontWeight||'').toString()==='800' || (active.style.fontWeight||'').toLowerCase()==='bold';
-    txItalic.checked = (active.style.fontStyle||'')==='italic';
-    txAlign.value = active.style.textAlign||'left';
-    const [sw, sc] = parseStroke(active.style['-webkit-text-stroke']||'0px #ffffff');
-    txStrokeW.value = sw; txStrokeColor.value = sc;
-    txShadow.checked = cs.textShadow && cs.textShadow !== 'none';
+    const cs=getComputedStyle(active);
+    txText.value=active.textContent;
+    txColor.value=rgbToHex(cs.color);
+    txSize.value=parseInt(active.style.fontSize)||44;
+    txWidth.value=parseInt(active.style.maxWidth)||360;
+    txRotate.value=parseFloat(active.dataset.rot||'0')||0;
+    txFont.value=(active.style.fontFamily||'').replaceAll('"','').split(',')[0]||'Luckiest Guy';
+    txBold.checked=(active.style.fontWeight||'').toString()==='800'||(active.style.fontWeight||'').toLowerCase()==='bold';
+    txItalic.checked=(active.style.fontStyle||'')==='italic';
+    txAlign.value=active.style.textAlign||'left';
+    const [sw,sc]=parseStroke(active.style['-webkit-text-stroke']||'0px #ffffff');
+    txStrokeW.value=sw; txStrokeColor.value=sc; txShadow.checked=cs.textShadow && cs.textShadow!=='none';
   }
   function applyInputs(el){
-    el.style.color = txColor.value;
-    el.style.fontSize = clamp(+txSize.value,10,180)+'px';
-    el.style.maxWidth = clamp(+txWidth.value,120,480)+'px';
-    el.style.fontFamily = '"'+txFont.value+'", system-ui, sans-serif';
-    el.style.fontWeight = txBold.checked ? '800' : '700';
-    el.style.fontStyle = txItalic.checked ? 'italic' : 'normal';
-    el.style.textAlign = txAlign.value;
-    const sw = clamp(+txStrokeW.value,0,20);
-    el.style['-webkit-text-stroke'] = `${sw}px ${txStrokeColor.value}`;
-    el.style.textShadow = txShadow.checked ? '2px 2px 3px rgba(0,0,0,.15)' : '0 0 0 transparent';
+    el.style.color=txColor.value;
+    el.style.fontSize=clamp(+txSize.value,10,180)+'px';
+    el.style.maxWidth=clamp(+txWidth.value,120,480)+'px';
+    el.style.fontFamily='"'+txFont.value+'", system-ui, sans-serif';
+    el.style.fontWeight=txBold.checked?'800':'700';
+    el.style.fontStyle=txItalic.checked?'italic':'normal';
+    el.style.textAlign=txAlign.value;
+    const sw=clamp(+txStrokeW.value,0,20);
+    el.style['-webkit-text-stroke']=`${sw}px ${txStrokeColor.value}`;
+    el.style.textShadow=txShadow.checked?'2px 2px 3px rgba(0,0,0,.15)':'0 0 0 transparent';
     setRotation(el, parseFloat(el.dataset.rot||'0'));
   }
-  function setRotation(el, deg){
-    deg = clamp(deg, -180, 180);
-    el.dataset.rot = String(deg);
-    el.style.transform = `rotate(${deg}deg)`;
-  }
-  btnAdd.onclick = createText;
-  btnDeleteSel.onclick = ()=>{ if(active){ active.remove(); active=null } };
-  btnClearText.onclick = ()=>{ layer.innerHTML=''; active=null };
+  function setRotation(el,deg){ deg=clamp(deg,-180,180); el.dataset.rot=String(deg); el.style.transform=`rotate(${deg}deg)`; }
+
+  btnAdd.onclick=createText;
+  btnDeleteSel.onclick=()=>{ if(active){ active.remove(); active=null } };
+  btnClearText.onclick=()=>{ layer.innerHTML=''; active=null };
+
+  // arrastre con límites
   layer.addEventListener('pointerdown', e=>{
     if(!(e.target instanceof HTMLElement)) return;
     if(!e.target.classList.contains('txt')) return;
     select(e.target);
-    const rect = layer.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
-    const sL = parseFloat(active.style.left)||0, sT = parseFloat(active.style.top)||0;
+    const rect=layer.getBoundingClientRect();
+    const sx=e.clientX, sy=e.clientY;
+    const sL=parseFloat(active.style.left)||0, sT=parseFloat(active.style.top)||0;
     active.setPointerCapture(e.pointerId);
     function mv(ev){
-      const dx = ev.clientX-sx, dy = ev.clientY-sy;
-      const nx = clamp(sL+dx, 0, rect.width-active.offsetWidth);
-      const ny = clamp(sT+dy, 0, rect.height-active.offsetHeight);
-      active.style.left = nx+'px'; active.style.top = ny+'px';
+      const dx=ev.clientX-sx, dy=ev.clientY-sy;
+      const nx=clamp(sL+dx,0,rect.width-active.offsetWidth);
+      const ny=clamp(sT+dy,0,rect.height-active.offsetHeight);
+      active.style.left=nx+'px'; active.style.top=ny+'px';
     }
     function up(){ active.releasePointerCapture(e.pointerId); window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); }
-    window.addEventListener('pointermove', mv);
-    window.addEventListener('pointerup', up);
+    window.addEventListener('pointermove',mv);
+    window.addEventListener('pointerup',up);
   });
-  stage.addEventListener('pointerdown', e=>{
-    if(e.target===stage || e.target===img || e.target===checker){
-      if(active) active.classList.remove('selected'); active=null;
-    }
-  });
-  txText.oninput = ()=>{ if(active) active.textContent = txText.value };
-  [txColor, txSize, txWidth, txFont, txBold, txItalic, txAlign, txStrokeColor, txStrokeW, txShadow].forEach(el=>{
-    el.addEventListener('input', ()=>{ if(active) applyInputs(active) });
-  });
-  txRotate.oninput = ()=>{ if(active){ setRotation(active, +txRotate.value) } };
-  txSwatches.addEventListener('click', e=>{
-    const v = e.target?.getAttribute?.('data'); if(!v) return;
-    txColor.value = v; if(active) applyInputs(active);
-  });
-  // atajos
-  window.addEventListener('keydown', e=>{
-    if(!active) return;
-    if(e.key==='Delete'){ active.remove(); active=null; return; }
-    const step = e.shiftKey ? 10 : 1;
-    const L = parseFloat(active.style.left)||0, T = parseFloat(active.style.top)||0;
-    if(e.key==='ArrowLeft' && !e.ctrlKey){ active.style.left = clamp(L-step,0, layer.clientWidth-active.offsetWidth)+'px'; e.preventDefault(); }
-    if(e.key==='ArrowRight' && !e.ctrlKey){ active.style.left = clamp(L+step,0, layer.clientWidth-active.offsetWidth)+'px'; e.preventDefault(); }
-    if(e.key==='ArrowUp'){ active.style.top = clamp(T-step,0, layer.clientHeight-active.offsetHeight)+'px'; e.preventDefault(); }
-    if(e.key==='ArrowDown'){ active.style.top = clamp(T+step,0, layer.clientHeight-active.offsetHeight)+'px'; e.preventDefault(); }
-    if(e.ctrlKey && e.key==='ArrowLeft'){ setRotation(active, (parseFloat(active.dataset.rot||'0')-5)); txRotate.value = active.dataset.rot; e.preventDefault(); }
-    if(e.ctrlKey && e.key==='ArrowRight'){ setRotation(active, (parseFloat(active.dataset.rot||'0')+5)); txRotate.value = active.dataset.rot; e.preventDefault(); }
-  });
-  // centrar y z-index
-  btnCenterH.onclick = ()=>{ if(!active) return; active.style.left = Math.max((layer.clientWidth-active.offsetWidth)/2,0)+'px' };
-  btnCenterV.onclick = ()=>{ if(!active) return; active.style.top  = Math.max((layer.clientHeight-active.offsetHeight)/2,0)+'px' };
-  btnFront.onclick = ()=>{ if(active) active.style.zIndex = Date.now().toString() };
-  btnBack.onclick  = ()=>{ if(active) active.style.zIndex = '0' };
+  stage.addEventListener('pointerdown', e=>{ if(e.target===stage||e.target===img||e.target===checker){ if(active) active.classList.remove('selected'); active=null; } });
 
-  // ------- Fondo / Transparencia
-  function updateBg(){
-    checker.classList.toggle('on', bgTransparent.checked);
-    stage.style.background = bgTransparent.checked ? 'transparent' : bgColor.value;
-  }
-  bgTransparent.oninput = updateBg; bgColor.oninput = updateBg; updateBg();
+  txText.oninput=()=>{ if(active) active.textContent=txText.value };
+  [txColor,txSize,txWidth,txFont,txBold,txItalic,txAlign,txStrokeColor,txStrokeW,txShadow].forEach(el=> el.addEventListener('input', ()=>{ if(active) applyInputs(active) }));
+  txRotate.oninput=()=>{ if(active){ setRotation(active, +txRotate.value) } };
+  txSwatches.addEventListener('click', e=>{ const v=e.target?.getAttribute?.('data'); if(!v) return; txColor.value=v; if(active) applyInputs(active); });
 
-  // Quitar fondo (flood-fill desde bordes con tolerancia y protección de borde)
-  btnRemoveBg.onclick = async () => {
+  // centrar / orden
+  btnCenterH.onclick=()=>{ if(!active) return; active.style.left=Math.max((layer.clientWidth-active.offsetWidth)/2,0)+'px' };
+  btnCenterV.onclick=()=>{ if(!active) return; active.style.top =Math.max((layer.clientHeight-active.offsetHeight)/2,0)+'px' };
+  btnFront.onclick =()=>{ if(active) active.style.zIndex=Date.now().toString() };
+  btnBack.onclick  =()=>{ if(active) active.style.zIndex='0' };
+
+  // Borde pegatina (texto): contorno blanco fuerte rápido
+  btnStickerBorder.onclick=()=>{ if(!active){ alert('Selecciona un texto (haz click sobre él).'); return; } txStrokeColor.value='#ffffff'; txStrokeW.value=6; txShadow.checked=true; applyInputs(active); };
+
+  // Fondo
+  function updateBg(){ checker.classList.toggle('on', bgTransparent.checked); stage.style.background = bgTransparent.checked ? 'transparent' : bgColor.value; }
+  bgTransparent.oninput=updateBg; bgColor.oninput=updateBg; updateBg();
+
+  // Quitar fondo: flood-fill desde bordes + protección de borde
+  btnRemoveBg.onclick = async ()=> {
     if (!imgLoaded) return alert('Primero sube una imagen.');
-    const SAFE_EDGE = 2; // protección de borde: aumenta a 3–4 si fuese necesario
+    const SAFE_EDGE = 2;
     const size = 1024;
-
-    const cvs = document.createElement('canvas'); cvs.width=cvs.height=size;
-    const ctx = cvs.getContext('2d');
-    await drawContain(ctx, img, size, size);
-
-    const data = ctx.getImageData(0,0,size,size);
-    const px = data.data;
-    const [Tr,Tg,Tb] = hexToRgb(rmColor.value);
-    const tol = +rmTol.value;
-    const W=size, H=size, N=W*H;
-    const mask = new Uint8Array(N);
-    const qx = new Uint32Array(N), qy = new Uint32Array(N);
-    let qs=0, qe=0;
-
-    const idx = (x,y)=> y*W+x;
-    const isBg = (x,y)=>{
-      const i=(y*W+x)*4; const r=px[i], g=px[i+1], b=px[i+2];
-      return dist(r,g,b,Tr,Tg,Tb) <= tol;
-    };
-    const push = (x,y)=>{ qx[qe]=x; qy[qe]=y; qe++; };
-    const popX = ()=> qx[qs]; const popY = ()=> qy[qs++];
-
+    const cvs=document.createElement('canvas'); cvs.width=cvs.height=size;
+    const ctx=cvs.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+    await drawContain(ctx,img,size,size);
+    const data=ctx.getImageData(0,0,size,size), px=data.data;
+    const [Tr,Tg,Tb]=hexToRgb(rmColor.value), tol=+rmTol.value;
+    const W=size,H=size,N=W*H; const mask=new Uint8Array(N); const qx=new Uint32Array(N), qy=new Uint32Array(N); let qs=0,qe=0;
+    const idx=(x,y)=>y*W+x;
+    const isBg=(x,y)=>{ const i=(y*W+x)*4; const r=px[i],g=px[i+1],b=px[i+2]; return dist(r,g,b,Tr,Tg,Tb)<=tol; };
+    const push=(x,y)=>{ qx[qe]=x; qy[qe]=y; qe++; };
+    const popX=()=>qx[qs]; const popY=()=>qy[qs++];
     for(let x=0;x<W;x++){ if(isBg(x,0)){ mask[idx(x,0)]=1; push(x,0);} if(isBg(x,H-1)){ mask[idx(x,H-1)]=1; push(x,H-1);} }
     for(let y=0;y<H;y++){ if(isBg(0,y)){ mask[idx(0,y)]=1; push(0,y);} if(isBg(W-1,y)){ mask[idx(W-1,y)]=1; push(W-1,y);} }
-
     while(qs<qe){
       const x=popX(), y=popY();
       if(x>0   && !mask[idx(x-1,y)] && isBg(x-1,y)){ mask[idx(x-1,y)]=1; push(x-1,y); }
@@ -482,141 +319,77 @@
       if(y>0   && !mask[idx(x,y-1)] && isBg(x,y-1)){ mask[idx(x,y-1)]=1; push(x,y-1); }
       if(y<H-1 && !mask[idx(x,y+1)] && isBg(x,y+1)){ mask[idx(x,y+1)]=1; push(x,y+1); }
     }
-
-    // erosión ligera para proteger borde de la pegatina
     for(let it=0; it<SAFE_EDGE; it++){
       const m2=new Uint8Array(N);
       for(let y=1;y<H-1;y++){
         for(let x=1;x<W-1;x++){
-          const o=idx(x,y);
-          if(!mask[o]) continue;
+          const o=idx(x,y); if(!mask[o]) continue;
           if(mask[o-1] && mask[o+1] && mask[o-W] && mask[o+W]) m2[o]=1;
         }
       }
-      // preservar marco tal como quedó
       for(let x=0;x<W;x++){ if(mask[idx(x,0)]) m2[idx(x,0)]=1; if(mask[idx(x,H-1)]) m2[idx(x,H-1)]=1; }
       for(let y=0;y<H;y++){ if(mask[idx(0,y)]) m2[idx(0,y)]=1; if(mask[idx(W-1,y)]) m2[idx(W-1,y)]=1; }
       mask.set(m2);
     }
-
     for(let i=0;i<N;i++){ if(mask[i]) px[i*4+3]=0; }
     ctx.putImageData(data,0,0);
-
-    img.src = cvs.toDataURL('image/png');
-    originalImgDataURL ??= img.src;
+    img.src=cvs.toDataURL('image/png'); originalImgDataURL ??= img.src;
   };
 
-  btnRestoreImg.onclick = ()=>{ if(originalImgDataURL){ img.src = originalImgDataURL; } };
+  btnRestoreImg.onclick=()=>{ if(originalImgDataURL){ img.src=originalImgDataURL; } };
 
-  btnPickColor.onclick = ()=>{
-    if(!imgLoaded) return alert('Sube una imagen primero.');
-    pickerMode = !pickerMode;
-    btnPickColor.textContent = pickerMode ? '🎯 Cuentagotas (activo)' : '🎯 Cuentagotas';
-  };
-  stage.addEventListener('click', async (e)=>{
-    if(!pickerMode || !imgLoaded) return;
-    const rect = stage.getBoundingClientRect();
-    const x = e.clientX - rect.left, y = e.clientY - rect.top;
-    const tmp = document.createElement('canvas'); tmp.width = tmp.height = 512;
-    const tctx = tmp.getContext('2d');
-    await drawContain(tctx, img, 512, 512);
-    const px = tctx.getImageData(Math.floor(x), Math.floor(y), 1, 1).data;
-    rmColor.value = rgbToHex(`rgb(${px[0]}, ${px[1]}, ${px[2]})`);
-    pickerMode = false; btnPickColor.textContent = '🎯 Cuentagotas';
-  });
+  btnPickColor.onclick=()=>{ if(!imgLoaded) return alert('Sube una imagen primero.'); pickerMode=!pickerMode; btnPickColor.textContent= pickerMode?'🎯 Cuentagotas (activo)':'🎯 Cuentagotas'; };
+  stage.addEventListener('click', async e=>{ if(!pickerMode||!imgLoaded) return; const rect=stage.getBoundingClientRect(); const x=e.clientX-rect.left,y=e.clientY-rect.top; const tmp=document.createElement('canvas'); tmp.width=tmp.height=512; const tctx=tmp.getContext('2d'); await drawContain(tctx,img,512,512); const p=tctx.getImageData(Math.floor(x),Math.floor(y),1,1).data; rmColor.value=rgbToHex(`rgb(${p[0]}, ${p[1]}, ${p[2]})`); pickerMode=false; btnPickColor.textContent='🎯 Cuentagotas'; });
 
-  // --------- Exportar
-  function doDownload(){
-    if(!imgLoaded) return alert('Primero sube una imagen.');
-    return downloadSticker();
-  }
-  btnDownload.onclick = doDownload;
-  btnDownload2.onclick = doDownload;
+  // Exportar
+  function doDownload(){ if(!imgLoaded) return alert('Primero sube una imagen.'); return downloadSticker(); }
+  btnDownload.onclick=doDownload; btnDownload2.onclick=doDownload;
 
   async function downloadSticker(){
-    const size = +exSize.value;
-    const fmt = exFmt.value;
-    const loads = new Set();
-    layer.querySelectorAll('.txt').forEach(el=>{
-      const fs = parseInt(el.style.fontSize)||44;
-      loads.add(document.fonts.load(`${el.style.fontStyle||'normal'} ${el.style.fontWeight||'700'} ${fs}px ${el.style.fontFamily||'Luckiest Guy'}`));
-    });
+    const size=+exSize.value, fmt=exFmt.value;
+    const loads=new Set();
+    layer.querySelectorAll('.txt').forEach(el=>{ const fs=parseInt(el.style.fontSize)||44; loads.add(document.fonts.load(`${el.style.fontStyle||'normal'} ${el.style.fontWeight||'700'} ${fs}px ${el.style.fontFamily||'Luckiest Guy'}`)); });
     await Promise.all([...loads]);
 
-    const cvs = document.createElement('canvas'); cvs.width=cvs.height=size;
-    const ctx = cvs.getContext('2d');
+    const cvs=document.createElement('canvas'); cvs.width=cvs.height=size;
+    const ctx=cvs.getContext('2d'); ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+    ctx.lineJoin='round'; ctx.lineCap='round'; ctx.miterLimit=2;
 
-    if(!bgTransparent.checked){
-      ctx.fillStyle = bgColor.value; ctx.fillRect(0,0,size,size);
-    }
-    await drawContain(ctx, img, size, size);
+    if(!bgTransparent.checked){ ctx.fillStyle=bgColor.value; ctx.fillRect(0,0,size,size); }
+    await drawContain(ctx,img,size,size);
 
-    const scale = size / layer.clientWidth;
-    const nodes = Array.from(layer.querySelectorAll('.txt')).sort((a,b)=> (+a.style.zIndex||0) - (+b.style.zIndex||0));
+    const scale=size/layer.clientWidth;
+    const nodes=[...layer.querySelectorAll('.txt')].sort((a,b)=>(+a.style.zIndex||0)-(+b.style.zIndex||0));
     for(const el of nodes){
-      const fs = parseFloat(el.style.fontSize)||44;
-      const fam = el.style.fontFamily || 'Luckiest Guy';
-      const weight = el.style.fontWeight || '700';
-      const italic = el.style.fontStyle || 'normal';
-      const align = el.style.textAlign || 'left';
-      const deg = parseFloat(el.dataset.rot||'0')||0;
-      const rad = deg * Math.PI / 180;
-      const x = parseFloat(el.style.left)||0;
-      const y = parseFloat(el.style.top)||0;
-      const maxW = parseFloat(el.style.maxWidth)||360;
-
-      ctx.save();
-      ctx.scale(scale, scale);
-      ctx.translate(x, y);
-      ctx.rotate(rad);
-      ctx.font = `${italic} ${weight} ${fs}px ${fam}`;
-      ctx.textBaseline = 'top';
-      ctx.textAlign = align;
-
-      let ax = 0;
-      if(align==='center') ax = (maxW)/2;
-      if(align==='right')  ax = (maxW);
-
-      const color = getComputedStyle(el).color;
-      const [sw, sc] = parseStroke(getComputedStyle(el)['-webkit-text-stroke'] || '0px #ffffff');
-      const hasShadow = (el.style.textShadow && el.style.textShadow !== '0 0 0 transparent');
-
-      if(hasShadow){
-        ctx.shadowColor='rgba(0,0,0,.15)';
-        ctx.shadowBlur=3; ctx.shadowOffsetX=2; ctx.shadowOffsetY=2;
-      }
+      const fs=parseFloat(el.style.fontSize)||44, fam=el.style.fontFamily||'Luckiest Guy', weight=el.style.fontWeight||'700', italic=el.style.fontStyle||'normal', align=el.style.textAlign||'left';
+      const deg=parseFloat(el.dataset.rot||'0')||0, rad=deg*Math.PI/180;
+      const x=parseFloat(el.style.left)||0, y=parseFloat(el.style.top)||0, maxW=parseFloat(el.style.maxWidth)||360;
+      ctx.save(); ctx.scale(scale,scale); ctx.translate(x,y); ctx.rotate(rad);
+      ctx.font=`${italic} ${weight} ${fs}px ${fam}`; ctx.textBaseline='top'; ctx.textAlign=align;
+      let ax=0; if(align==='center') ax=maxW/2; if(align==='right') ax=maxW;
+      const color=getComputedStyle(el).color; const [sw,sc]=parseStroke(getComputedStyle(el)['-webkit-text-stroke']||'0px #ffffff'); const hasShadow=(el.style.textShadow && el.style.textShadow!=='0 0 0 transparent');
+      if(hasShadow){ ctx.shadowColor='rgba(0,0,0,.15)'; ctx.shadowBlur=3; ctx.shadowOffsetX=2; ctx.shadowOffsetY=2; }
       drawWrappedText(ctx, el.textContent, ax, 0, maxW, fs*1.15, color, sw, sc);
       ctx.restore();
     }
-
-    const mime = fmt==='webp' ? 'image/webp' : 'image/png';
-    const url = cvs.toDataURL(mime);
-    const a = document.createElement('a');
-    a.href = url; a.download = `sticker_${size}.${fmt}`;
-    a.click();
+    const mime=fmt==='webp'?'image/webp':'image/png'; const url=cvs.toDataURL(mime); const a=document.createElement('a'); a.href=url; a.download=`sticker_${size}.${fmt}`; a.click();
   }
 
-  // --------- Utilidades
+  // Utils
   function clamp(v,min,max){ return Math.min(Math.max(v,min),max) }
   function parseStroke(s){ const m=s.match(/([\d.]+)px\s+([#a-zA-Z0-9(),.\s]+)/); return m?[+m[1], m[2].trim()]:[0,'#ffffff']; }
   function rgbToHex(rgb){ const m=rgb.match(/\d+/g); if(!m) return '#000000'; const [r,g,b]=m.map(Number); return '#'+[r,g,b].map(n=>n.toString(16).padStart(2,'0')).join(''); }
-  function hexToRgb(hex){ let h=hex.replace('#','').trim(); if(h.length===3){ h=h.split('').map(c=>c+c).join(''); } const n=parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
+  function hexToRgb(hex){ let h=hex.replace('#','').trim(); if(h.length===3) h=h.split('').map(c=>c+c).join(''); const n=parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; }
   function dist(r,g,b,R,G,B){ return Math.hypot(r-R,g-G,b-B) }
   async function drawContain(ctx, imgEl, W, H){
     if(!imgEl.complete){ await new Promise(res=>{ imgEl.onload=()=>res(); imgEl.onerror=()=>res(); }); }
-    const iw=imgEl.naturalWidth, ih=imgEl.naturalHeight, ir=iw/ih, cr=W/H;
-    let dw,dh,dx,dy;
-    if(ir>cr){ dw=W; dh=W/ir; dx=0; dy=(H-dh)/2; }
-    else { dh=H; dw=H*ir; dy=0; dx=(W-dw)/2; }
+    const iw=imgEl.naturalWidth, ih=imgEl.naturalHeight, ir=iw/ih, cr=W/H; let dw,dh,dx,dy;
+    if(ir>cr){ dw=W; dh=W/ir; dx=0; dy=(H-dh)/2; } else { dh=H; dw=H*ir; dy=0; dx=(W-dw)/2; }
     ctx.drawImage(imgEl, dx,dy,dw,dh);
   }
   function drawWrappedText(ctx, text, x, y, maxW, lh, fillColor, strokeW, strokeColor){
     const words=text.split(/\s+/); let line='', lines=[];
-    for(let i=0;i<words.length;i++){
-      const test=line?line+' '+words[i]:words[i];
-      if(ctx.measureText(test).width<=maxW){ line=test; }
-      else { if(line) lines.push(line); line=words[i]; }
-    }
+    for(let i=0;i<words.length;i++){ const test=line?line+' '+words[i]:words[i]; if(ctx.measureText(test).width<=maxW){ line=test; } else { if(line) lines.push(line); line=words[i]; } }
     if(line) lines.push(line);
     for(let i=0;i<lines.length;i++){
       const ly=y+i*lh;
