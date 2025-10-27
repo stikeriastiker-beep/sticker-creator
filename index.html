@@ -3,23 +3,20 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Sticker Creator — Fluido</title>
-<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&family=Baloo+2:wght@700&family=Fredoka:wght@700&display=swap" rel="stylesheet">
+<title>Sticker Creator — Simple y fiable</title>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@700&family=Fredoka:wght@700&display=swap" rel="stylesheet">
 <style>
-  :root{ --size:512px; --brand:#0ea5e9; --brand2:#22d3ee; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --stage-bg:#ffffff; --stage-bd:#e6eaf3; }
+  :root{ --size:512px; --brand:#0ea5e9; --ok:#22c55e; --warn:#f59e0b; --danger:#ef4444; --stage-bg:#fff; --stage-bd:#e6eaf3; }
   *{box-sizing:border-box} html,body{margin:0}
   body{
     font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    background:
-      radial-gradient(900px 500px at 80% -10%, rgba(34,211,238,.18), transparent 60%),
-      radial-gradient(700px 450px at 10% -20%, rgba(14,165,233,.22), transparent 50%),
-      linear-gradient(180deg,#0c1229 0%, #0b1020 50%, #0a0f1e 100%);
+    background:linear-gradient(180deg,#0c1229 0%, #0b1020 50%, #0a0f1e 100%);
     min-height:100vh; color:#eaf2ff;
   }
   .shell{max-width:960px;margin:24px auto;padding:0 16px}
   .topbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;
     background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px 12px;backdrop-filter:blur(6px)}
-  .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer;user-select:none}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:12px;padding:9px 12px;font-weight:800;cursor:pointer;user-select:none}
   .ghost{background:#0e1733;color:#e7efff;border:1px solid rgba(255,255,255,.14)}
   .primary{background:linear-gradient(90deg,#0ea5e9,#22d3ee);color:#00121a}
   .ok{background:linear-gradient(90deg,#22c55e,#86efac);color:#052914}
@@ -33,23 +30,24 @@
   #checker.on{display:block}
   #preview{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none}
   #textLayer{position:absolute;inset:0;pointer-events:none}
+
   .txt{
     position:absolute;left:140px;top:200px;max-width:360px;white-space:pre-wrap;pointer-events:auto;cursor:move;user-select:none;
-    color:#111827;font-size:44px;font-weight:800;line-height:1.15;
+    color:#111827;font-size:46px;font-weight:800;line-height:1.15;
     font-family:"Luckiest Guy", system-ui, sans-serif;
     -webkit-text-stroke:6px #ffffff; text-shadow:2px 2px 3px rgba(0,0,0,.15);
     transform-origin:left top; transform:rotate(0deg); padding:2px 4px; border-radius:10px; background:transparent
   }
   .txt.selected{outline:2px solid #0ea5e9; box-shadow:0 0 0 3px rgba(14,165,233,.18)}
+  .txt[contenteditable="true"]{caret-color:#111827; outline:2px dashed #22d3ee}
 
   .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111827;color:#e5e7eb;padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);box-shadow:0 8px 24px rgba(0,0,0,.35);font-size:13px;display:none;z-index:9999}
-  .overlay{
-    position:fixed; inset:0; display:none; place-items:center;
-    background:rgba(0,0,0,.35); backdrop-filter: blur(2px); z-index:9998;
-  }
-  .spinner{
-    background:#0e1733; border:1px solid rgba(255,255,255,.14); color:#e7efff; padding:12px 16px; border-radius:12px; font-weight:700
-  }
+  .overlay{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.35); backdrop-filter: blur(2px); z-index:9998;}
+  .spinner{background:#0e1733; border:1px solid rgba(255,255,255,.14); color:#e7efff; padding:12px 16px; border-radius:12px; font-weight:700}
+
+  .mini{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:8px}
+  .mini label{font-size:12px;color:#cfe1ff;display:flex;align-items:center;gap:6px}
+  input[type="color"], input[type="range"]{background:#0e1733;color:#e7efff;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:4px 6px}
 </style>
 </head>
 <body>
@@ -65,10 +63,27 @@
       <button type="button" id="btnClear" class="btn danger">🗑️ Limpiar</button>
     </div>
 
+    <div class="mini">
+      <label>🎯 Fondo (click en el fondo)
+        <input id="pickMode" type="checkbox">
+      </label>
+      <label>🎚️ Tolerancia
+        <input id="tol" type="range" min="8" max="60" value="26">
+      </label>
+      <label>🎨 Color texto
+        <input id="txColor" type="color" value="#111827">
+      </label>
+      <label>🔠 Fuente
+        <select id="txFont">
+          <option>Luckiest Guy</option><option>Baloo 2</option><option>Fredoka</option>
+        </select>
+      </label>
+    </div>
+
     <div class="stage-wrap">
-      <div id="stage" tabindex="0">
+      <div id="stage" tabindex="0" title="Doble click en el texto para editar. Flechas mueven. Ctrl+←/→ rota.">
         <div id="checker"></div>
-        <img id="preview" alt="Imagen" crossorigin="anonymous">
+        <img id="preview" alt="Imagen">
         <div id="textLayer"></div>
       </div>
     </div>
@@ -83,434 +98,287 @@
   const file = $('#file');
   const btnPick = $('#btnPick'), btnText = $('#btnText'), btnBorder = $('#btnBorder'), btnRemoveBg = $('#btnRemoveBg'), btnRestore = $('#btnRestore'), btnDownload = $('#btnDownload'), btnClear = $('#btnClear');
   const toastEl = $('#toast'), overlay = $('#overlay');
+  const pickMode = $('#pickMode'), tolSlider = $('#tol'), txColor = $('#txColor'), txFont = $('#txFont');
 
-  let active = null, imgLoaded = false, originalImgDataURL = null, isBusy = false, cancelFlag = false;
+  let active = null, imgLoaded = false, originalImgDataURL = null, isBusy = false;
+  let rmColor = [255,255,255]; // color de fondo seleccionado
+  const WORK = 640; // tamaño de trabajo rápido
 
-  // ---------- Utils UI
-  function tip(t, ms = 1500) {
-    toastEl.textContent = t;
-    toastEl.style.display = 'block';
-    setTimeout(() => toastEl.style.display = 'none', ms);
-  }
-  function setBusy(v) {
-    isBusy = v;
-    overlay.style.display = v ? 'grid' : 'none';
-    [...document.querySelectorAll('.btn')].forEach(b => b.disabled = v);
-  }
-  function clamp(v, min, max) {
-    return Math.min(Math.max(v, min), max);
-  }
-  function dist(r, g, b, R, G, B) {
-    return Math.hypot(r - R, g - G, b - B);
-  }
-  function parseStroke(s) {
-    if (!s || s === '0px') return [0, '#ffffff'];
-    const parts = s.trim().split(/\s+/);
-    if (parts.length >= 2) {
-      const width = parseFloat(parts[0]) || 0;
-      const color = parts.slice(1).join(' ');
-      return [width, color];
-    }
-    return [0, '#ffffff'];
-  }
+  // UI utils
+  const tip = (t,ms=1500)=>{ toastEl.textContent=t; toastEl.style.display='block'; setTimeout(()=>toastEl.style.display='none',ms); };
+  const setBusy = v => { isBusy=v; overlay.style.display=v?'grid':'none'; [...document.querySelectorAll('.btn')].forEach(b=>b.disabled=v); };
+  const clamp = (v,min,max)=>Math.min(Math.max(v,min),max);
+  const dist = (r,g,b,R,G,B)=>Math.hypot(r-R,g-G,b-B);
 
-  // Dibuja conteniendo y reescala máximo a 768 para procesar rápido
-  async function drawContain(ctx, imgEl, W, H) {
-    if (!imgEl.complete || imgEl.naturalWidth === 0) {
-      await new Promise((resolve, reject) => {
-        imgEl.onload = () => resolve();
-        imgEl.onerror = () => reject(new Error('Image load failed'));
-      });
-      if (imgEl.naturalWidth === 0) throw new Error('Invalid image');
-    }
-    const iw = imgEl.naturalWidth, ih = imgEl.naturalHeight, ir = iw / ih, cr = W / H;
-    let dw, dh, dx, dy;
-    if (ir > cr) {
-      dw = W; dh = W / ir; dx = 0; dy = (H - dh) / 2;
-    } else {
-      dh = H; dw = H * ir; dy = 0; dx = (W - dw) / 2;
-    }
-    ctx.clearRect(0, 0, W, H);
-    ctx.drawImage(imgEl, dx, dy, dw, dh);
-  }
-
-  // ---------- Imagen
-  btnPick.onclick = () => file.click();
-  file.onchange = e => {
-    const f = e.target.files?.[0];
-    if (!f) return;
-    const rd = new FileReader();
-    rd.onload = ev => {
-      setImage(ev.target.result);
-      file.value = '';
-    };
+  // Imagen
+  btnPick.onclick=()=>file.click();
+  file.onchange=e=>{
+    const f=e.target.files?.[0]; if(!f) return;
+    const rd=new FileReader();
+    rd.onload=ev=>{ setImage(ev.target.result); file.value=''; };
     rd.readAsDataURL(f);
   };
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev =>
-    stage.addEventListener(ev, e => {
-      e.preventDefault();
-      e.stopPropagation();
-    })
-  );
-  stage.addEventListener('drop', e => {
-    const f = e.dataTransfer.files?.[0];
-    if (f && f.type.startsWith('image/')) {
-      const rd = new FileReader();
-      rd.onload = ev => setImage(ev.target.result);
-      rd.readAsDataURL(f);
-    }
+  ['dragenter','dragover','dragleave','drop'].forEach(ev=>stage.addEventListener(ev,e=>{e.preventDefault(); e.stopPropagation();}));
+  stage.addEventListener('drop',e=>{
+    const f=e.dataTransfer.files?.[0];
+    if(f&&f.type.startsWith('image/')){ const rd=new FileReader(); rd.onload=ev=>setImage(ev.target.result); rd.readAsDataURL(f); }
   });
-  function setImage(src) {
-    img.src = src;
-    img.style.display = 'block';
-    imgLoaded = true;
-    originalImgDataURL = src;
-    checker.classList.add('on');
-    tip('Imagen cargada');
+  function setImage(src){
+    img.src=src; img.style.display='block'; imgLoaded=true; originalImgDataURL=src; checker.classList.add('on'); tip('Imagen cargada');
   }
 
-  // ---------- Textos
-  function createText() {
-    if (!imgLoaded) return tip('Primero sube una imagen');
-    const el = document.createElement('div');
-    el.className = 'txt';
-    el.textContent = 'Nuevo texto';
-    el.dataset.rot = '0';
-    el.style.left = '140px';
-    el.style.top = '200px';
-    el.style.maxWidth = '360px';
-    layer.appendChild(el);
-    select(el);
-    tip('Texto añadido');
-  }
-  function select(el) {
-    if (active) active.classList.remove('selected');
-    active = el;
-    if (active) active.classList.add('selected');
-  }
-  btnText.onclick = createText;
+  // Texto
+  btnText.onclick = ()=>{
+    if(!imgLoaded) return tip('Primero sube una imagen');
+    const el=document.createElement('div');
+    el.className='txt'; el.textContent='Nuevo texto'; el.dataset.rot='0';
+    el.style.left='140px'; el.style.top='200px'; el.style.maxWidth='360px';
+    el.style.color=txColor.value; el.style.fontFamily=`"${txFont.value}", system-ui, sans-serif`;
+    layer.appendChild(el); select(el); tip('Doble click para escribir');
+  };
+  function select(el){ if(active) active.classList.remove('selected'); active=el; if(active) active.classList.add('selected'); }
+
+  // editar con doble click
+  layer.addEventListener('dblclick', e=>{
+    if(!(e.target instanceof HTMLElement)) return;
+    if(!e.target.classList.contains('txt')) return;
+    select(e.target); active.setAttribute('contenteditable','true'); active.focus();
+    const sel=window.getSelection(); const r=document.createRange(); r.selectNodeContents(active); sel.removeAllRanges(); sel.addRange(r);
+  });
+  // salir de edición con Enter o blur
+  layer.addEventListener('keydown', e=>{
+    if(e.target===active && active?.getAttribute('contenteditable')==='true' && e.key==='Enter'){ e.preventDefault(); active.blur(); }
+  });
+  layer.addEventListener('focusout', e=>{
+    if(e.target===active && active?.getAttribute('contenteditable')==='true'){ active.removeAttribute('contenteditable'); }
+  });
 
   // arrastrar con límites
-  layer.addEventListener('pointerdown', e => {
-    if (!(e.target instanceof HTMLElement)) return;
-    if (!e.target.classList.contains('txt')) return;
+  layer.addEventListener('pointerdown', e=>{
+    if(!(e.target instanceof HTMLElement)) return;
+    if(!e.target.classList.contains('txt')) return;
+    if(active?.getAttribute('contenteditable')==='true') return; // no arrastrar mientras escribe
     select(e.target);
-    const rect = layer.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
-    const sL = parseFloat(active.style.left) || 0, sT = parseFloat(active.style.top) || 0;
+    const rect=layer.getBoundingClientRect();
+    const sx=e.clientX, sy=e.clientY;
+    const sL=parseFloat(active.style.left)||0, sT=parseFloat(active.style.top)||0;
     active.setPointerCapture(e.pointerId);
-    function mv(ev) {
-      const dx = ev.clientX - sx, dy = ev.clientY - sy;
-      const nx = clamp(sL + dx, 0, rect.width - active.offsetWidth);
-      const ny = clamp(sT + dy, 0, rect.height - active.offsetHeight);
-      active.style.left = nx + 'px';
-      active.style.top = ny + 'px';
-    }
-    function up() {
-      active.releasePointerCapture(e.pointerId);
-      window.removeEventListener('pointermove', mv);
-      window.removeEventListener('pointerup', up);
-    }
-    window.addEventListener('pointermove', mv);
-    window.addEventListener('pointerup', up);
+    const mv=ev=>{
+      const dx=ev.clientX-sx, dy=ev.clientY-sy;
+      const nx=clamp(sL+dx, 0, rect.width-active.offsetWidth);
+      const ny=clamp(sT+dy, 0, rect.height-active.offsetHeight);
+      active.style.left=nx+'px'; active.style.top=ny+'px';
+    };
+    const up=()=>{ active.releasePointerCapture(e.pointerId); window.removeEventListener('pointermove',mv); window.removeEventListener('pointerup',up); };
+    window.addEventListener('pointermove', mv); window.addEventListener('pointerup', up);
   });
-  stage.addEventListener('pointerdown', e => {
-    if (e.target === stage || e.target === img || e.target === checker) {
-      if (active) active.classList.remove('selected');
-      active = null;
-    }
+  stage.addEventListener('pointerdown', e=>{ if(e.target===stage||e.target===img||e.target===checker){ if(active) active.classList.remove('selected'); active=null; }});
+  window.addEventListener('keydown', e=>{
+    if(!active || active.getAttribute('contenteditable')==='true') return;
+    const step=e.shiftKey?10:1; const L=parseFloat(active.style.left)||0, T=parseFloat(active.style.top)||0;
+    if(e.key==='Delete'){ active.remove(); active=null; tip('Texto borrado'); return; }
+    if(e.key==='ArrowLeft' && !e.ctrlKey){ active.style.left=clamp(L-step,0,layer.clientWidth-active.offsetWidth)+'px'; e.preventDefault(); }
+    if(e.key==='ArrowRight'&& !e.ctrlKey){ active.style.left=clamp(L+step,0,layer.clientWidth-active.offsetWidth)+'px'; e.preventDefault(); }
+    if(e.key==='ArrowUp'){ active.style.top=clamp(T-step,0,layer.clientHeight-active.offsetHeight)+'px'; e.preventDefault(); }
+    if(e.key==='ArrowDown'){ active.style.top=clamp(T+step,0,layer.clientHeight-active.offsetHeight)+'px'; e.preventDefault(); }
+    if(e.ctrlKey && e.key==='ArrowLeft'){ setRotation(active,(parseFloat(active.dataset.rot||'0')-5)); e.preventDefault(); }
+    if(e.ctrlKey && e.key==='ArrowRight'){ setRotation(active,(parseFloat(active.dataset.rot||'0')+5)); e.preventDefault(); }
   });
-  // rotación/movimiento por teclado
-  window.addEventListener('keydown', e => {
-    if (!active) return;
-    const step = e.shiftKey ? 10 : 1;
-    const L = parseFloat(active.style.left) || 0, T = parseFloat(active.style.top) || 0;
-    if (e.key === 'Delete') {
-      active.remove();
-      active = null;
-      tip('Texto borrado');
-      return;
-    }
-    if (e.key === 'ArrowLeft' && !e.ctrlKey) {
-      active.style.left = clamp(L - step, 0, layer.clientWidth - active.offsetWidth) + 'px';
-      e.preventDefault();
-    }
-    if (e.key === 'ArrowRight' && !e.ctrlKey) {
-      active.style.left = clamp(L + step, 0, layer.clientWidth - active.offsetWidth) + 'px';
-      e.preventDefault();
-    }
-    if (e.key === 'ArrowUp') {
-      active.style.top = clamp(T - step, 0, layer.clientHeight - active.offsetHeight) + 'px';
-      e.preventDefault();
-    }
-    if (e.key === 'ArrowDown') {
-      active.style.top = clamp(T + step, 0, layer.clientHeight - active.offsetHeight) + 'px';
-      e.preventDefault();
-    }
-    if (e.ctrlKey && e.key === 'ArrowLeft') {
-      setRotation(active, (parseFloat(active.dataset.rot || '0') - 5));
-      e.preventDefault();
-    }
-    if (e.ctrlKey && e.key === 'ArrowRight') {
-      setRotation(active, (parseFloat(active.dataset.rot || '0') + 5));
-      e.preventDefault();
-    }
-  });
-  function setRotation(el, deg) {
-    deg = clamp(deg, -180, 180);
-    el.dataset.rot = String(deg);
-    el.style.transform = `rotate(${deg}deg)`;
-  }
+  function setRotation(el,deg){ deg=clamp(deg,-180,180); el.dataset.rot=String(deg); el.style.transform=`rotate(${deg}deg)`; }
 
-  // borde texto
-  btnBorder.onclick = () => {
-    if (!active) return tip('Haz click en un texto');
-    active.style['-webkit-text-stroke'] = '6px #ffffff';
-    active.style.textShadow = '2px 2px 3px rgba(0,0,0,.15)';
-    tip('Borde aplicado');
+  // color y fuente del texto activo
+  txColor.oninput=()=>{ if(active) active.style.color=txColor.value; };
+  txFont.oninput =()=>{ if(active) active.style.fontFamily=`"${txFont.value}", system-ui, sans-serif`; };
+
+  // borde texto ON/OFF
+  btnBorder.onclick=()=>{
+    if(!active) return tip('Haz click en un texto');
+    const cur=getComputedStyle(active)['-webkit-text-stroke']||'0px #ffffff';
+    const on=!cur.startsWith('6px');
+    active.style['-webkit-text-stroke']= on ? '6px #ffffff' : '0px #ffffff';
+    active.style.textShadow= on ? '2px 2px 3px rgba(0,0,0,.15)' : '0 0 0 transparent';
   };
 
-  // ---------- Quitar fondo (fluido, por lotes, con protección)
-  btnRemoveBg.onclick = async () => {
-    if (!imgLoaded || isBusy) return;
+  // Cuentagotas de fondo: activa el toggle y haz click sobre el fondo de la imagen
+  pickMode.onchange=()=>{ tip(pickMode.checked?'Cuentagotas activo: haz click en el fondo':'Cuentagotas desactivado',1200); };
+  stage.addEventListener('click', async e=>{
+    if(!pickMode.checked || !imgLoaded) return;
+    const rect=stage.getBoundingClientRect();
+    const x=Math.floor((e.clientX-rect.left)/rect.width*WORK);
+    const y=Math.floor((e.clientY-rect.top)/rect.height*WORK);
+    const tmp=document.createElement('canvas'); tmp.width=tmp.height=WORK;
+    const tctx=tmp.getContext('2d',{willReadFrequently:true});
+    await drawContain(tctx,img,WORK,WORK);
+    const p=tctx.getImageData(x,y,1,1).data;
+    rmColor=[p[0],p[1],p[2]];
+    tip(`Color fondo: rgb(${rmColor[0]},${rmColor[1]},${rmColor[2]})`,1400);
+    pickMode.checked=false;
+  });
+
+  // Quitar fondo con anti-halo + decontaminación
+  btnRemoveBg.onclick = async ()=>{
+    if(!imgLoaded || isBusy) return;
     setBusy(true);
-    cancelFlag = false;
-    try {
-      const MAX = 768;
-      const cvs = document.createElement('canvas');
-      const ctx = cvs.getContext('2d', { willReadFrequently: true });
-      cvs.width = cvs.height = MAX;
-      await drawContain(ctx, img, MAX, MAX);
-      let data = ctx.getImageData(0, 0, MAX, MAX);
-      let px = data.data;
-      const W = MAX, H = MAX, N = W * H;
+    try{
+      const cvs=document.createElement('canvas'); const ctx=cvs.getContext('2d',{willReadFrequently:true});
+      cvs.width=cvs.height=WORK;
+      await drawContain(ctx,img,WORK,WORK);
+      let im=ctx.getImageData(0,0,WORK,WORK), px=im.data;
+      const W=WORK,H=WORK,N=W*H;
+      const [Br,Bg,Bb]=rmColor;
+      const TOL=+tolSlider.value;      // tolerancia elegida
+      const ERODE=1, DILATE=2, FEATHER=1;
 
-      // color predominante en el marco (cuantizado)
-      const [Tr, Tg, Tb] = dominantEdgeColor(px, W, H);
-      const TOL = 26;
-      const SAFE_EDGE = 2;
+      const mask=new Uint8Array(N);
+      const qx=new Uint32Array(N), qy=new Uint32Array(N); let qs=0,qe=0;
+      const idx=(x,y)=>y*W+x;
+      const isBg=(x,y)=>{ const i=(y*W+x)*4; return dist(px[i],px[i+1],px[i+2],Br,Bg,Bb)<=TOL; };
+      const push=(x,y)=>{ qx[qe]=x; qy[qe]=y; qe++; };
+      const popX=()=>qx[qs], popY=()=>qy[qs++];
 
-      const mask = new Uint8Array(N);
-      const qx = new Uint32Array(N), qy = new Uint32Array(N);
-      let qs = 0, qe = 0;
-      const idx = (x, y) => y * W + x;
-      const isBg = (x, y) => {
-        const i = (y * W + x) * 4;
-        const r = px[i], g = px[i + 1], b = px[i + 2];
-        return dist(r, g, b, Tr, Tg, Tb) <= TOL;
-      };
-      const push = (x, y) => {
-        qx[qe] = x;
-        qy[qe] = y;
-        qe++;
-      };
-      const popX = () => qx[qs], popY = () => qy[qs++];
+      for(let x=0;x<W;x++){ if(isBg(x,0)){ mask[idx(x,0)]=1; push(x,0);} if(isBg(x,H-1)){ mask[idx(x,H-1)]=1; push(x,H-1);} }
+      for(let y=0;y<H;y++){ if(isBg(0,y)){ mask[idx(0,y)]=1; push(0,y);} if(isBg(W-1,y)){ mask[idx(W-1,y)]=1; push(W-1,y);} }
 
-      for (let x = 0; x < W; x++) {
-        if (isBg(x, 0)) { mask[idx(x, 0)] = 1; push(x, 0); }
-        if (isBg(x, H - 1)) { mask[idx(x, H - 1)] = 1; push(x, H - 1); }
-      }
-      for (let y = 0; y < H; y++) {
-        if (isBg(0, y)) { mask[idx(0, y)] = 1; push(0, y); }
-        if (isBg(W - 1, y)) { mask[idx(W - 1, y)] = 1; push(W - 1, y); }
-      }
-
-      const BATCH = 20000;
-      while (qs < qe) {
-        for (let k = 0; k < BATCH && qs < qe; k++) {
-          const x = popX(), y = popY();
-          if (x > 0 && !mask[idx(x - 1, y)] && isBg(x - 1, y)) { mask[idx(x - 1, y)] = 1; push(x - 1, y); }
-          if (x < W - 1 && !mask[idx(x + 1, y)] && isBg(x + 1, y)) { mask[idx(x + 1, y)] = 1; push(x + 1, y); }
-          if (y > 0 && !mask[idx(x, y - 1)] && isBg(x, y - 1)) { mask[idx(x, y - 1)] = 1; push(x, y - 1); }
-          if (y < H - 1 && !mask[idx(x, y + 1)] && isBg(x, y + 1)) { mask[idx(x, y + 1)] = 1; push(x, y + 1); }
+      // BFS por lotes
+      const BATCH=20000;
+      while(qs<qe){
+        for(let k=0;k<BATCH && qs<qe;k++){
+          const x=popX(), y=popY();
+          if(x>0   && !mask[idx(x-1,y)] && isBg(x-1,y)){ mask[idx(x-1,y)]=1; push(x-1,y); }
+          if(x<W-1 && !mask[idx(x+1,y)] && isBg(x+1,y)){ mask[idx(x+1,y)]=1; push(x+1,y); }
+          if(y>0   && !mask[idx(x,y-1)] && isBg(x,y-1)){ mask[idx(x,y-1)]=1; push(x,y-1); }
+          if(y<H-1 && !mask[idx(x,y+1)] && isBg(x,y+1)){ mask[idx(x,y+1)]=1; push(x,y+1); }
         }
-        await new Promise(r => setTimeout(r, 0));
-        if (cancelFlag) throw new Error('cancelado');
+        await new Promise(r=>setTimeout(r,0));
       }
 
-      // erosión suave
-      for (let it = 0; it < SAFE_EDGE; it++) {
-        const m2 = new Uint8Array(N);
-        for (let y = 1; y < H - 1; y++) {
-          for (let x = 1; x < W - 1; x++) {
-            const o = idx(x, y);
-            if (!mask[o]) continue;
-            if (mask[o - 1] && mask[o + 1] && mask[o - W] && mask[o + W]) m2[o] = 1;
+      // alpha inicial
+      const alpha=new Uint8ClampedArray(N);
+      for(let i=0;i<N;i++) alpha[i]=mask[i]?0:255;
+
+      // morfología: contrae y re-expande + feather
+      morphErodeDilate(alpha,W,H,ERODE,DILATE);
+      featherAlpha(alpha,W,H,FEATHER);
+
+      // decontaminación de color en borde
+      for(let y=0;y<H;y++){
+        for(let x=0;x<W;x++){
+          const o=y*W+x; const a=alpha[o]/255; const i=o*4;
+          if(a>0 && a<1){
+            let r=px[i], g=px[i+1], b=px[i+2];
+            r=(r-(1-a)*Br)/a; g=(g-(1-a)*Bg)/a; b=(b-(1-a)*Bb)/a;
+            px[i]  =Math.max(0,Math.min(255,r));
+            px[i+1]=Math.max(0,Math.min(255,g));
+            px[i+2]=Math.max(0,Math.min(255,b));
           }
+          px[i+3]=alpha[o];
         }
-        for (let x = 0; x < W; x++) {
-          if (mask[idx(x, 0)]) m2[idx(x, 0)] = 1;
-          if (mask[idx(x, H - 1)]) m2[idx(x, H - 1)] = 1;
-        }
-        for (let y = 0; y < H; y++) {
-          if (mask[idx(0, y)]) m2[idx(0, y)] = 1;
-          if (mask[idx(W - 1, y)]) m2[idx(W - 1, y)] = 1;
-        }
-        mask.set(m2);
-        await new Promise(r => setTimeout(r, 0));
       }
 
-      for (let i = 0; i < N; i++) {
-        if (mask[i]) px[i * 4 + 3] = 0;
-      }
-      ctx.putImageData(data, 0, 0);
-      img.src = cvs.toDataURL('image/png');
+      ctx.putImageData(im,0,0);
+      img.src=cvs.toDataURL('image/png');
       tip('Fondo eliminado');
-    } catch (err) {
-      tip('No se pudo quitar el fondo');
-      console.error(err);
-    } finally {
-      setBusy(false);
-    }
+    }catch(e){ tip('No se pudo quitar el fondo'); console.error(e); }
+    finally{ setBusy(false); }
   };
 
-  // restaurar
-  btnRestore.onclick = () => {
-    if (!imgLoaded || !originalImgDataURL) return tip('No hay imagen original');
-    img.src = originalImgDataURL;
-    tip('Restaurado');
-  };
-
-  // descargar PNG 1024
-  btnDownload.onclick = async () => {
-    if (!imgLoaded || isBusy || layer.clientWidth <= 0) return;
+  // Restaurar / Descargar / Limpiar
+  btnRestore.onclick=()=>{ if(!imgLoaded||!originalImgDataURL) return tip('No hay imagen original'); img.src=originalImgDataURL; tip('Restaurado'); };
+  btnDownload.onclick=async ()=>{
+    if(!imgLoaded || isBusy || layer.clientWidth<=0) return;
     setBusy(true);
-    try {
-      const size = 1024, fmt = 'image/png';
-      const cvs = document.createElement('canvas');
-      cvs.width = cvs.height = size;
-      const ctx = cvs.getContext('2d');
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.lineJoin = 'round';
-      ctx.lineCap = 'round';
-      ctx.miterLimit = 2;
+    try{
+      const size=1024, fmt='image/png';
+      const cvs=document.createElement('canvas'); const ctx=cvs.getContext('2d');
+      cvs.width=cvs.height=size; ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+      await drawContain(ctx,img,size,size);
 
-      try {
-        await drawContain(ctx, img, size, size);
-      } catch (err) {
-        tip('Error al procesar la imagen');
-        setBusy(false);
-        return;
-      }
+      const scale=size/layer.clientWidth;
+      const nodes=[...layer.querySelectorAll('.txt')].sort((a,b)=>(+a.style.zIndex||0)-(+b.style.zIndex||0));
+      for(const el of nodes){
+        const fs=parseFloat(el.style.fontSize)||46;
+        const fam=el.style.fontFamily||'"Luckiest Guy", system-ui, sans-serif';
+        const weight=el.style.fontWeight||'800';
+        const italic=el.style.fontStyle||'normal';
+        const align=el.style.textAlign||'left';
+        const deg=parseFloat(el.dataset.rot||'0')||0;
+        const rad=deg*Math.PI/180;
+        const x=parseFloat(el.style.left)||0, y=parseFloat(el.style.top)||0;
+        const maxW=parseFloat(el.style.maxWidth)||360;
 
-      const scale = size / layer.clientWidth;
-      const nodes = [...layer.querySelectorAll('.txt')].sort((a, b) => (+a.style.zIndex || 0) - (+b.style.zIndex || 0));
-      for (const el of nodes) {
-        const fs = parseFloat(el.style.fontSize) || 44;
-        const fam = el.style.fontFamily || '"Luckiest Guy", system-ui, sans-serif';
-        const weight = el.style.fontWeight || '800';
-        const italic = el.style.fontStyle || 'normal';
-        const align = el.style.textAlign || 'left';
-        const deg = parseFloat(el.dataset.rot || '0') || 0;
-        const rad = deg * Math.PI / 180;
-        const x = parseFloat(el.style.left) || 0;
-        const y = parseFloat(el.style.top) || 0;
-        const maxW = parseFloat(el.style.maxWidth) || 360;
-
-        ctx.save();
-        ctx.scale(scale, scale);
-        ctx.translate(x, y);
-        ctx.rotate(rad);
-        ctx.font = `${italic} ${weight} ${fs}px ${fam}`;
-        ctx.textBaseline = 'top';
-        ctx.textAlign = align;
-        let ax = 0;
-        if (align === 'center') ax = maxW / 2;
-        if (align === 'right') ax = maxW;
-
-        const color = getComputedStyle(el).color;
-        const [sw, sc] = parseStroke(getComputedStyle(el)['-webkit-text-stroke'] || '0px #ffffff');
-        const hasShadow = (el.style.textShadow && el.style.textShadow !== '0 0 0 transparent');
-        if (hasShadow) {
-          ctx.shadowColor = 'rgba(0,0,0,.15)';
-          ctx.shadowBlur = 3;
-          ctx.shadowOffsetX = 2;
-          ctx.shadowOffsetY = 2;
-        }
-
-        drawWrappedText(ctx, el.textContent, ax, 0, maxW, fs * 1.15, color, sw, sc);
+        ctx.save(); ctx.scale(scale,scale); ctx.translate(x,y); ctx.rotate(rad);
+        ctx.font=`${italic} ${weight} ${fs}px ${fam}`; ctx.textBaseline='top'; ctx.textAlign=align;
+        let ax=0; if(align==='center') ax=maxW/2; if(align==='right') ax=maxW;
+        const color=getComputedStyle(el).color;
+        const [sw,sc]=parseStroke(getComputedStyle(el)['-webkit-text-stroke']);
+        if(el.style.textShadow && el.style.textShadow!=='0 0 0 transparent'){ ctx.shadowColor='rgba(0,0,0,.15)'; ctx.shadowBlur=3; ctx.shadowOffsetX=2; ctx.shadowOffsetY=2; }
+        drawWrapped(ctx, el.textContent, ax, 0, maxW, fs*1.15, color, sw||6, sc||'#ffffff');
         ctx.restore();
       }
 
-      const url = cvs.toDataURL(fmt);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'sticker_1024.png';
-      a.click();
-      tip('Descargado');
-    } finally {
-      setBusy(false);
-    }
+      const url=cvs.toDataURL(fmt); const a=document.createElement('a'); a.href=url; a.download='sticker_1024.png'; a.click();
+    }finally{ setBusy(false); }
+  };
+  btnClear.onclick=()=>{
+    img.src=''; img.style.display='none'; checker.classList.remove('on');
+    layer.innerHTML=''; active=null; imgLoaded=false; file.value=''; tip('Lienzo limpio');
   };
 
-  // limpiar todo
-  btnClear.onclick = () => {
-    cancelFlag = true;
-    img.src = '';
-    img.style.display = 'none';
-    checker.classList.remove('on');
-    layer.innerHTML = '';
-    active = null;
-    imgLoaded = false;
-    originalImgDataURL = null;
-    file.value = '';
-    tip('Lienzo limpio');
-  };
-
-  // texto multilínea
-  function drawWrappedText(ctx, text, x, y, maxW, lh, fillColor, strokeW, strokeColor) {
-    const words = (text || '').split(/\s+/);
-    let line = '', lines = [];
-    for (let i = 0; i < words.length; i++) {
-      const test = line ? line + ' ' + words[i] : words[i];
-      if (ctx.measureText(test).width <= maxW) {
-        line = test;
-      } else {
-        if (line) lines.push(line);
-        line = words[i];
+  // helpers
+  async function drawContain(ctx, imgEl, W, H){
+    if(!imgEl.complete){ await new Promise((res,rej)=>{ imgEl.onload=()=>res(); imgEl.onerror=()=>rej(); }); }
+    const iw=imgEl.naturalWidth||imgEl.width, ih=imgEl.naturalHeight||imgEl.height; const ir=iw/ih, cr=W/H; let dw,dh,dx,dy;
+    if(ir>cr){ dw=W; dh=W/ir; dx=0; dy=(H-dh)/2; } else { dh=H; dw=H*ir; dy=0; dx=(W-dw)/2; }
+    ctx.clearRect(0,0,W,H); ctx.drawImage(imgEl,dx,dy,dw,dh);
+  }
+  function parseStroke(s){ if(!s||s==='0px') return [0,'#ffffff']; const m=s.match(/([\d.]+)px\s+(.+)/); return m?[+m[1], m[2].trim()]:[0,'#ffffff']; }
+  function drawWrapped(ctx,text,x,y,maxW,lh,fill,sw,sc){
+    const words=(text||'').split(/\s+/); let line='', lines=[];
+    for(const w of words){ const t=line?line+' '+w:w; if(ctx.measureText(t).width<=maxW){ line=t; } else { if(line) lines.push(line); line=w; } }
+    if(line) lines.push(line);
+    for(let i=0;i<lines.length;i++){ const yy=y+i*lh; if(sw>0){ ctx.lineWidth=sw; ctx.strokeStyle=sc; ctx.strokeText(lines[i],x,yy); } ctx.fillStyle=fill; ctx.fillText(lines[i],x,yy); }
+  }
+  function morphErodeDilate(alpha,W,H,erodePx,dilatePx){
+    if(erodePx>0){
+      let a2=alpha.slice();
+      for(let it=0;it<erodePx;it++){
+        const out=new Uint8ClampedArray(alpha.length);
+        for(let y=1;y<H-1;y++){ for(let x=1;x<W-1;x++){
+          const o=y*W+x; out[o]=(a2[o]===0||a2[o-1]===0||a2[o+1]===0||a2[o-W]===0||a2[o+W]===0)?0:255;
+        }} a2=out; alpha.set(out);
       }
     }
-    if (line) lines.push(line);
-    for (let i = 0; i < lines.length; i++) {
-      const ly = y + i * lh;
-      if (strokeW > 0) {
-        ctx.lineWidth = strokeW;
-        ctx.strokeStyle = strokeColor;
-        ctx.strokeText(lines[i], x, ly);
+    if(dilatePx>0){
+      let a2=alpha.slice();
+      for(let it=0;it<dilatePx;it++){
+        const out=new Uint8ClampedArray(alpha.length);
+        for(let y=1;y<H-1;y++){ for(let x=1;x<W-1;x++){
+          const o=y*W+x; out[o]=(a2[o]===255||a2[o-1]===255||a2[o+1]===255||a2[o-W]===255||a2[o+W]===255)?255:0;
+        }} a2=out; alpha.set(out);
       }
-      ctx.fillStyle = fillColor;
-      ctx.fillText(lines[i], x, ly);
     }
   }
-
-  // color predominante en el borde (cuantizado a 16 niveles por canal)
-  function dominantEdgeColor(px, W, H) {
-    if (W < 2 || H < 2) {
-      return [px[0] & 0xF0, px[1] & 0xF0, px[2] & 0xF0];
-    }
-    const hist = new Map();
-    const push = i => {
-      const r = px[i], g = px[i + 1], b = px[i + 2];
-      const key = ((r & 0xF0) << 16) | ((g & 0xF0) << 8) | (b & 0xF0);
-      hist.set(key, (hist.get(key) || 0) + 1);
-    };
-    for (let x = 0; x < W; x++) {
-      push((0 * W + x) * 4);
-      push(((H - 1) * W + x) * 4);
-    }
-    for (let y = 0; y < H; y++) {
-      push((y * W + 0) * 4);
-      push((y * W + (W - 1)) * 4);
-    }
-    let best = 0, cnt = -1;
-    for (const [k, v] of hist) {
-      if (v > cnt) {
-        cnt = v;
-        best = k;
+  function featherAlpha(alpha,W,H,r){
+    if(r<=0) return;
+    const tmp=new Float32Array(alpha.length);
+    for(let y=0;y<H;y++){
+      let sum=0;
+      for(let x=0;x<W;x++){
+        sum+=alpha[y*W+x];
+        if(x>=r) sum-=alpha[y*W+(x-r)];
+        tmp[y*W+x]=sum/Math.min(x+1,r);
       }
     }
-    return [(best >> 16) & 0xF0, (best >> 8) & 0xF0, best & 0xF0];
+    const out=new Uint8ClampedArray(alpha.length);
+    for(let x=0;x<W;x++){
+      let sum=0;
+      for(let y=0;y<H;y++){
+        sum+=tmp[y*W+x];
+        if(y>=r) sum-=tmp[(y-r)*W+x];
+        out[y*W+x]=Math.round(sum/Math.min(y+1,r));
+      }
+    }
+    alpha.set(out);
   }
 </script>
 </body>
